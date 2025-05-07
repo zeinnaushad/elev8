@@ -55,20 +55,20 @@ const FeaturedProducts = () => {
 
   if (isLoading) {
     return (
-      <section id="new-arrivals" className="py-16 px-4 bg-neutral-100">
+      <section id="new-arrivals" className="py-16 px-4 cosmic-bg">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
-            <Skeleton className="h-10 w-52 mb-4 md:mb-0" />
+            <Skeleton className="h-10 w-52 mb-4 md:mb-0 bg-gray-800" />
             <div className="flex space-x-4">
               {["All", "Women", "Men", "Accessories"].map((filter) => (
-                <Skeleton key={filter} className="h-6 w-20" />
+                <Skeleton key={filter} className="h-6 w-20 bg-gray-800" />
               ))}
             </div>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <Skeleton key={i} className="h-96 w-full" />
+              <Skeleton key={i} className="h-96 w-full bg-gray-800" />
             ))}
           </div>
         </div>
@@ -78,58 +78,58 @@ const FeaturedProducts = () => {
 
   if (error || !products) {
     return (
-      <section id="new-arrivals" className="py-16 px-4 bg-neutral-100">
+      <section id="new-arrivals" className="py-16 px-4 cosmic-bg">
         <div className="container mx-auto text-center">
-          <h2 className="font-montserrat font-semibold text-3xl md:text-4xl mb-4">New Arrivals</h2>
-          <p className="text-neutral-600 mb-8">Unable to load products. Please try again later.</p>
+          <h2 className="font-space font-semibold text-3xl md:text-4xl mb-4 text-white">Our Products</h2>
+          <p className="text-gray-300 mb-8">Unable to load products. Please try again later.</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section id="new-arrivals" className="py-16 px-4 bg-neutral-100">
-      <div className="container mx-auto">
+    <section id="new-arrivals" className="py-16 px-4 cosmic-bg">
+      <div className="container mx-auto star-shimmer">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
           <motion.h2
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="font-montserrat font-semibold text-3xl md:text-4xl mb-4 md:mb-0"
+            className="font-space font-semibold text-3xl md:text-4xl mb-6 md:mb-0 text-white"
           >
-            New Arrivals
+            Our Products
           </motion.h2>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="flex space-x-4"
+            className="flex space-x-8"
           >
             <FilterButton
               active={activeFilter === "all"}
               onClick={() => setActiveFilter("all")}
             >
-              All
+              SALE
             </FilterButton>
             <FilterButton
               active={activeFilter === "women"}
               onClick={() => setActiveFilter("women")}
             >
-              Women
+              HOT
             </FilterButton>
             <FilterButton
               active={activeFilter === "men"}
               onClick={() => setActiveFilter("men")}
             >
-              Men
+              NEW ARRIVALS
             </FilterButton>
             <FilterButton
               active={activeFilter === "accessories"}
               onClick={() => setActiveFilter("accessories")}
             >
-              Accessories
+              ACCESSORIES
             </FilterButton>
           </motion.div>
         </div>
@@ -151,9 +151,9 @@ const FeaturedProducts = () => {
         <div className="text-center mt-12">
           <Button 
             variant="outline" 
-            className="border-2 border-primary text-primary font-montserrat font-medium px-8 py-6 h-auto hover:bg-primary hover:text-white"
+            className="border-2 border-white text-white font-space font-medium px-8 py-4 h-auto hover:bg-white hover:text-black rounded-none"
           >
-            View All Products
+            See All
           </Button>
         </div>
       </div>
@@ -169,8 +169,8 @@ interface FilterButtonProps {
 
 const FilterButton = ({ active, onClick, children }: FilterButtonProps) => (
   <button
-    className={`font-medium transition-colors ${
-      active ? "text-primary" : "text-neutral-500 hover:text-accent"
+    className={`font-space font-medium tracking-wide transition-colors ${
+      active ? "text-white" : "text-gray-400 hover:text-white"
     }`}
     onClick={onClick}
   >
@@ -192,7 +192,7 @@ const ProductCard = ({ product, index, onAddToCart, onWishlist }: ProductCardPro
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       viewport={{ once: true }}
-      className="product-card bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+      className="product-card overflow-hidden shadow-md transition-all duration-300 cosmic-section"
     >
       <div className="relative">
         <Link href={`/product/${product.slug}`}>
@@ -200,7 +200,7 @@ const ProductCard = ({ product, index, onAddToCart, onWishlist }: ProductCardPro
             <img
               src={product.imageUrl}
               alt={product.name}
-              className="w-full h-72 object-cover"
+              className="w-full h-72 object-cover hover:scale-105 transition-transform duration-500"
             />
           </a>
         </Link>
@@ -208,39 +208,38 @@ const ProductCard = ({ product, index, onAddToCart, onWishlist }: ProductCardPro
           <Button
             variant="ghost"
             size="icon"
-            className="bg-white p-2 rounded-full hover:bg-accent hover:text-white transition-colors"
+            className="bg-black bg-opacity-50 backdrop-blur-sm p-2 rounded-full hover:bg-accent hover:text-white transition-colors"
             onClick={onWishlist}
           >
-            <Heart className="h-5 w-5" />
+            <Heart className="h-5 w-5 text-white" />
           </Button>
         </div>
         {product.isNew === 1 && (
           <div className="absolute top-4 left-4">
-            <Badge className="bg-accent text-white">New</Badge>
+            <Badge className="bg-pink-600 text-white font-space">New</Badge>
           </div>
         )}
       </div>
-      <div className="p-4">
+      <div className="p-5">
         <Link href={`/product/${product.slug}`}>
           <a>
-            <h3 className="font-montserrat font-medium text-lg mb-1 hover:text-accent transition-colors">
+            <h3 className="font-space font-medium text-lg mb-1 text-white hover:text-pink-400 transition-colors">
               {product.name}
             </h3>
           </a>
         </Link>
-        <p className="text-neutral-500 text-sm mb-2">
-          {product.categoryId === 1
-            ? "Women's Fashion"
-            : product.categoryId === 2
-            ? "Men's Fashion"
-            : "Accessories"}
-        </p>
+        <div className="flex items-center space-x-1 mb-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <span key={star} className="text-yellow-400 text-xs">★</span>
+          ))}
+          <span className="text-gray-400 text-xs ml-1">5.0</span>
+        </div>
         <div className="flex justify-between items-center">
-          <span className="font-semibold text-pink-600">₹{Math.round(parseFloat(String(product.price)) * 83)}</span>
+          <span className="font-semibold text-pink-400 font-space">₹{Math.round(parseFloat(String(product.price)) * 83)}</span>
           <Button
             variant="default"
             size="icon"
-            className="bg-primary text-white p-2 rounded-full hover:bg-accent transition-colors"
+            className="bg-white text-black p-2 rounded-full hover:bg-pink-400 hover:text-white transition-colors"
             onClick={onAddToCart}
           >
             <ShoppingBag className="h-4 w-4" />

@@ -15,25 +15,25 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1581338834647-b0fb40704e21?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
-    title: "Autumn Collection",
-    subtitle: "Discover the latest trends and timeless classics.",
+    image: "https://images.unsplash.com/photo-1534481909716-9a482087f27d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    title: "LIFE IS TOO SHORT",
+    subtitle: "Explore our curated collection of stylish clothing and accessories to elevate your look",
     buttonText: "Shop Now",
     buttonLink: "/category/women",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
-    title: "Winter Essentials",
-    subtitle: "Stay stylish while staying warm this season.",
+    image: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    title: "TO DRESS BORING",
+    subtitle: "Express yourself with our premium fashion pieces designed for the bold",
     buttonText: "Explore",
     buttonLink: "/category/men",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
-    title: "New Season",
-    subtitle: "Redefine your wardrobe with our exclusive pieces.",
+    image: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    title: "ELEVATE YOUR STYLE",
+    subtitle: "Stand out from the crowd with fashion that makes a statement",
     buttonText: "Discover",
     buttonLink: "/category/accessories",
   },
@@ -81,7 +81,8 @@ const HeroSlider = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-neutral-100 h-[600px] sm:h-[700px]">
+    <section className="relative overflow-hidden cosmic-bg h-[600px] sm:h-[700px]">
+      
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={currentSlide}
@@ -91,25 +92,17 @@ const HeroSlider = () => {
           animate="center"
           exit="exit"
           transition={{ type: "tween", duration: 0.5 }}
-          className="absolute inset-0"
+          className="absolute inset-0 z-10"
         >
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${slides[currentSlide].image}')` }}
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-20" />
-          <div className="relative h-full flex items-center px-6 md:px-12 lg:px-24">
+          <div className="relative h-full flex items-center justify-between px-6 md:px-12 lg:px-24">
             <div className="max-w-md">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="font-montserrat font-light text-white text-4xl md:text-5xl lg:text-6xl leading-tight mb-4"
+                className="font-serif font-light text-white text-4xl md:text-5xl lg:text-6xl leading-tight mb-4"
               >
-                {slides[currentSlide].title}{" "}
-                <span className="font-semibold block">
-                  {currentSlide === 0 ? "2023" : currentSlide === 1 ? "Collection" : "New Style"}
-                </span>
+                {slides[currentSlide].title}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -126,11 +119,27 @@ const HeroSlider = () => {
               >
                 <Button
                   asChild
-                  className="bg-white text-primary hover:bg-accent hover:text-white font-montserrat font-medium px-8 py-6 h-auto"
+                  className="bg-white hover:bg-gray-200 text-black font-medium px-8 py-4 h-auto rounded-none transition-colors"
                 >
                   <a href={slides[currentSlide].buttonLink}>{slides[currentSlide].buttonText}</a>
                 </Button>
               </motion.div>
+            </div>
+            <div className="hidden md:block max-w-md h-full">
+              <div className="h-full flex items-center">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="relative overflow-hidden rounded-lg shadow-2xl"
+                  style={{ width: '350px', height: '400px' }}
+                >
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url('${slides[currentSlide].image}')` }}
+                  />
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.div>
