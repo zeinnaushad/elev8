@@ -120,10 +120,10 @@ const Category = ({ slug }: CategoryProps) => {
   return (
     <>
       <Helmet>
-        <title>{`${category.name} Collection | LUXEMODE`}</title>
+        <title>{`${category.name} Collection | ELEV8`}</title>
         <meta 
           name="description" 
-          content={`Shop our premium ${category.name.toLowerCase()} collection at LUXEMODE. Discover the latest trends and timeless classics with worldwide shipping.`} 
+          content={`Shop our premium ${category.name.toLowerCase()} collection at ELEV8. Discover the latest trends and timeless classics with worldwide shipping.`} 
         />
       </Helmet>
       

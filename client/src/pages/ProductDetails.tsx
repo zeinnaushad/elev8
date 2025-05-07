@@ -107,10 +107,10 @@ const ProductDetails = ({ slug }: ProductDetailsProps) => {
   return (
     <>
       <Helmet>
-        <title>{`${product.name} - ${categoryName} | LUXEMODE`}</title>
+        <title>{`${product.name} - ${categoryName} | ELEV8`}</title>
         <meta 
           name="description" 
-          content={`${product.description} Shop premium fashion at LUXEMODE with worldwide shipping.`} 
+          content={`${product.description} Shop premium fashion at ELEV8 with worldwide shipping.`} 
         />
       </Helmet>
       
@@ -229,7 +229,7 @@ const ProductDetails = ({ slug }: ProductDetailsProps) => {
               </div>
               <div className="flex items-center text-sm">
                 <span className="text-neutral-600 min-w-32">SKU:</span>
-                <span className="font-medium">LUX-{product.id.toString().padStart(4, '0')}</span>
+                <span className="font-medium">ELEV8-{product.id.toString().padStart(4, '0')}</span>
               </div>
               <div className="flex items-center text-sm">
                 <span className="text-neutral-600 min-w-32">Availability:</span>
@@ -256,7 +256,7 @@ const ProductDetails = ({ slug }: ProductDetailsProps) => {
             <div>
               <h2 className="font-montserrat font-semibold text-xl mb-4">Delivery & Returns</h2>
               <ul className="space-y-2 text-neutral-600">
-                <li>Free worldwide shipping on orders over $150</li>
+                <li>Free worldwide shipping on orders over ₹12,450</li>
                 <li>Express shipping available (2-3 business days)</li>
                 <li>Standard shipping (5-7 business days)</li>
                 <li>Free 30-day returns on all orders</li>
