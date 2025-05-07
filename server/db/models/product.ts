@@ -36,7 +36,7 @@ const productSchema = new mongoose.Schema({
     type: Date, 
     default: Date.now 
   }
-});
+}, { suppressReservedKeysWarning: true });
 
 // Add virtual id field to match the interface
 productSchema.virtual('id').get(function(this: any) {
