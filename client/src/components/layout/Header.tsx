@@ -30,44 +30,43 @@ const Header = ({ toggleCart }: HeaderProps) => {
   const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <header className={`sticky top-0 z-50 bg-white transition-shadow ${isScrolled ? 'shadow-md' : 'shadow-sm'}`}>
+    <header className={`sticky top-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm transition-shadow ${isScrolled ? 'shadow-md' : 'shadow-sm'}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/">
-            <a className="font-montserrat font-bold text-2xl tracking-wider text-pink-600">ELEV8</a>
+            <a className="font-space font-bold text-2xl tracking-wider text-white">ELEV8</a>
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            <NavLink href="/" active={location === "/"}>Home</NavLink>
-            <NavLink href="/category/women" active={location === "/category/women"}>Women</NavLink>
-            <NavLink href="/category/men" active={location === "/category/men"}>Men</NavLink>
-            <NavLink href="/category/accessories" active={location === "/category/accessories"}>Accessories</NavLink>
-            <NavLink href="/#new-arrivals" active={false}>New Arrivals</NavLink>
+          <nav className="hidden md:flex space-x-10">
+            <NavLink href="/" active={location === "/"}>HOME</NavLink>
+            <NavLink href="/category/women" active={location === "/category/women"}>SHOP</NavLink>
+            <NavLink href="/features" active={location === "/features"}>FEATURES</NavLink>
+            <NavLink href="/contact" active={location === "/contact"}>CONTACT</NavLink>
           </nav>
           
           {/* Icons */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" aria-label="Search">
+          <div className="flex items-center space-x-5">
+            <Button variant="ghost" size="icon" aria-label="Search" className="text-white hover:text-pink-400">
               <Search className="h-5 w-5" />
             </Button>
             
-            <Button variant="ghost" size="icon" aria-label="Account">
+            <Button variant="ghost" size="icon" aria-label="Account" className="text-white hover:text-pink-400">
               <User className="h-5 w-5" />
             </Button>
             
             <Button 
               variant="ghost" 
               size="icon" 
-              className="relative" 
+              className="relative text-white hover:text-pink-400" 
               aria-label="Shopping cart"
               onClick={toggleCart}
             >
               <ShoppingBag className="h-5 w-5" />
               {cartItemCount > 0 && (
                 <Badge 
-                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-accent text-white"
+                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-pink-600 text-white"
                 >
                   {cartItemCount}
                 </Badge>
@@ -77,7 +76,7 @@ const Header = ({ toggleCart }: HeaderProps) => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="md:hidden" 
+              className="md:hidden text-white hover:text-pink-400" 
               aria-label="Menu" 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
@@ -94,7 +93,7 @@ const Header = ({ toggleCart }: HeaderProps) => {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden"
+              className="md:hidden overflow-hidden cosmic-section"
             >
               <div className="py-4 space-y-4">
                 <MobileNavLink 
@@ -102,7 +101,7 @@ const Header = ({ toggleCart }: HeaderProps) => {
                   active={location === "/"} 
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Home
+                  HOME
                 </MobileNavLink>
                 
                 <MobileNavLink 
@@ -110,31 +109,23 @@ const Header = ({ toggleCart }: HeaderProps) => {
                   active={location === "/category/women"} 
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Women
+                  SHOP
                 </MobileNavLink>
                 
                 <MobileNavLink 
-                  href="/category/men" 
-                  active={location === "/category/men"} 
+                  href="/features" 
+                  active={location === "/features"} 
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Men
+                  FEATURES
                 </MobileNavLink>
                 
                 <MobileNavLink 
-                  href="/category/accessories" 
-                  active={location === "/category/accessories"} 
+                  href="/contact" 
+                  active={location === "/contact"} 
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Accessories
-                </MobileNavLink>
-                
-                <MobileNavLink 
-                  href="/#new-arrivals" 
-                  active={false} 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  New Arrivals
+                  CONTACT
                 </MobileNavLink>
               </div>
             </motion.div>
@@ -153,7 +144,7 @@ interface NavLinkProps {
 
 const NavLink = ({ href, active, children }: NavLinkProps) => (
   <Link href={href}>
-    <a className={`font-montserrat font-medium transition-colors ${active ? 'text-accent' : 'hover:text-accent'}`}>
+    <a className={`font-space text-sm font-medium tracking-wide transition-colors ${active ? 'text-white' : 'text-gray-400 hover:text-white'}`}>
       {children}
     </a>
   </Link>
@@ -166,7 +157,7 @@ interface MobileNavLinkProps extends NavLinkProps {
 const MobileNavLink = ({ href, active, onClick, children }: MobileNavLinkProps) => (
   <Link href={href}>
     <a 
-      className={`block font-montserrat font-medium py-2 transition-colors ${active ? 'text-accent' : 'hover:text-accent'}`}
+      className={`block font-space text-sm font-medium tracking-wide py-2 transition-colors ${active ? 'text-white' : 'text-gray-400 hover:text-white'}`}
       onClick={onClick}
     >
       {children}
