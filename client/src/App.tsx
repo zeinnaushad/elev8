@@ -17,6 +17,7 @@ import AuthPage from "@/pages/auth-page";
 import CheckoutPage from "@/pages/checkout-page";
 import ContactPage from "@/pages/contact-page";
 import FeaturesPage from "@/pages/features-page";
+import ShopPage from "@/pages/shop-page";
 import NotFound from "@/pages/not-found";
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
                   <Route path="/checkout" component={CheckoutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/features" component={FeaturesPage} />
+                  <Route path="/shop" component={ShopPage} />
                   <Route path="/product/:slug">
                     {params => <ProductDetails slug={params.slug} />}
                   </Route>

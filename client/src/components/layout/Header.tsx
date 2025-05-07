@@ -49,7 +49,7 @@ const Header = ({ toggleCart }: HeaderProps) => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-10">
             <NavLink href="/" active={location === "/"}>HOME</NavLink>
-            <NavLink href="/category/women" active={location === "/category/women"}>SHOP</NavLink>
+            <NavLink href="/shop" active={location === "/shop" || location.startsWith("/category/")}>SHOP</NavLink>
             <NavLink href="/features" active={location === "/features"}>FEATURES</NavLink>
             <NavLink href="/contact" active={location === "/contact"}>CONTACT</NavLink>
           </nav>
@@ -144,8 +144,8 @@ const Header = ({ toggleCart }: HeaderProps) => {
                 </MobileNavLink>
                 
                 <MobileNavLink 
-                  href="/category/women" 
-                  active={location === "/category/women"} 
+                  href="/shop" 
+                  active={location === "/shop" || location.startsWith("/category/")} 
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   SHOP
