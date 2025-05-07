@@ -170,7 +170,7 @@ const ProductDetails = ({ slug }: ProductDetailsProps) => {
           >
             <h1 className="font-montserrat font-semibold text-3xl">{product.name}</h1>
             
-            <p className="text-2xl font-semibold">${parseFloat(String(product.price)).toFixed(2)}</p>
+            <p className="text-2xl font-semibold text-pink-600">₹{Math.round(parseFloat(String(product.price)) * 83)}</p>
             
             <p className="text-neutral-600">{product.description}</p>
             

@@ -35,7 +35,7 @@ const Header = ({ toggleCart }: HeaderProps) => {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/">
-            <a className="font-montserrat font-bold text-2xl tracking-wider">LUXEMODE</a>
+            <a className="font-montserrat font-bold text-2xl tracking-wider text-pink-600">ELEV8</a>
           </Link>
           
           {/* Desktop Navigation */}

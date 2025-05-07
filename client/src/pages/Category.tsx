@@ -162,10 +162,10 @@ const Category = ({ slug }: CategoryProps) => {
               <div className="space-y-6">
                 <FilterSection title="Price Range">
                   <div className="space-y-2">
-                    <CheckboxItem id="price-0-50" label="$0 - $50" />
-                    <CheckboxItem id="price-50-100" label="$50 - $100" />
-                    <CheckboxItem id="price-100-200" label="$100 - $200" />
-                    <CheckboxItem id="price-200" label="$200+" />
+                    <CheckboxItem id="price-0-50" label="₹0 - ₹4,150" />
+                    <CheckboxItem id="price-50-100" label="₹4,150 - ₹8,300" />
+                    <CheckboxItem id="price-100-200" label="₹8,300 - ₹16,600" />
+                    <CheckboxItem id="price-200" label="₹16,600+" />
                   </div>
                 </FilterSection>
                 
@@ -243,10 +243,10 @@ const Category = ({ slug }: CategoryProps) => {
                   <div className="space-y-6">
                     <FilterSection title="Price Range">
                       <div className="space-y-2">
-                        <CheckboxItem id="m-price-0-50" label="$0 - $50" />
-                        <CheckboxItem id="m-price-50-100" label="$50 - $100" />
-                        <CheckboxItem id="m-price-100-200" label="$100 - $200" />
-                        <CheckboxItem id="m-price-200" label="$200+" />
+                        <CheckboxItem id="m-price-0-50" label="₹0 - ₹4,150" />
+                        <CheckboxItem id="m-price-50-100" label="₹4,150 - ₹8,300" />
+                        <CheckboxItem id="m-price-100-200" label="₹8,300 - ₹16,600" />
+                        <CheckboxItem id="m-price-200" label="₹16,600+" />
                       </div>
                     </FilterSection>
                     
@@ -439,7 +439,7 @@ const ProductCard = ({ product, index, onAddToCart, onWishlist }: ProductCardPro
             : product.description}
         </p>
         <div className="flex justify-between items-center">
-          <span className="font-semibold">${parseFloat(String(product.price)).toFixed(2)}</span>
+          <span className="font-semibold text-pink-600">₹{Math.round(parseFloat(String(product.price)) * 83)}</span>
           <Button
             variant="default"
             size="icon"

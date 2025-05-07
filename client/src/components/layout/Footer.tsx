@@ -3,12 +3,12 @@ import { Facebook, Twitter, Instagram, MapPin, Phone, Mail } from "lucide-react"
 
 const Footer = () => {
   return (
-    <footer className="bg-neutral-900 text-white pt-16 pb-8">
+    <footer className="bg-black text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div>
-            <h3 className="font-montserrat font-semibold text-xl mb-4">LUXEMODE</h3>
+            <h3 className="font-montserrat font-semibold text-xl mb-4 text-pink-500">ELEV8</h3>
             <p className="text-neutral-400 mb-4">
               Premium fashion brand offering timeless designs and exceptional quality for the fashion-conscious individual.
             </p>
@@ -91,7 +91,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-3 shrink-0" />
-                <span>info@luxemode.com</span>
+                <span>info@elev8fashion.com</span>
               </li>
             </ul>
           </div>
@@ -100,7 +100,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="pt-8 border-t border-neutral-800 flex flex-col md:flex-row justify-between items-center">
           <p className="text-neutral-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} LUXEMODE. All rights reserved.
+            &copy; {new Date().getFullYear()} ELEV8. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <img 

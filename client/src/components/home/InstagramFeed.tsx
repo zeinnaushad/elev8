@@ -75,9 +75,9 @@ const InstagramFeed = () => {
             href="https://www.instagram.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center text-primary font-montserrat font-medium hover:text-accent transition-colors"
+            className="inline-flex items-center text-pink-500 font-montserrat font-medium hover:text-pink-600 transition-colors"
           >
-            <Instagram className="mr-2 h-5 w-5" /> @luxemode
+            <Instagram className="mr-2 h-5 w-5" /> @elev8fashion
           </a>
         </motion.div>
       </div>

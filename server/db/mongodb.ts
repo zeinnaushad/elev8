@@ -1,14 +1,22 @@
 import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import { log } from '../vite';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/fashion_ecommerce';
+let mongoServer: MongoMemoryServer;
 
-// Connect to MongoDB
+// Connect to MongoDB using mongodb-memory-server
 export async function connectToDatabase() {
   try {
-    log(`Connecting to MongoDB at ${MONGODB_URI}`, 'mongodb');
-    await mongoose.connect(MONGODB_URI);
-    log('Connected to MongoDB successfully!', 'mongodb');
+    // Create MongoDB Memory Server
+    mongoServer = await MongoMemoryServer.create();
+    const mongoUri = mongoServer.getUri();
+    
+    log(`Connecting to MongoDB Memory Server at ${mongoUri}`, 'mongodb');
+    
+    // Connect to the in-memory database
+    await mongoose.connect(mongoUri);
+    
+    log('Connected to MongoDB Memory Server successfully!', 'mongodb');
     return true;
   } catch (error) {
     log(`Error connecting to MongoDB: ${error}`, 'mongodb');
@@ -18,8 +26,11 @@ export async function connectToDatabase() {
 }
 
 // Graceful shutdown
-export function closeDatabaseConnection() {
-  return mongoose.connection.close();
+export async function closeDatabaseConnection() {
+  await mongoose.connection.close();
+  if (mongoServer) {
+    await mongoServer.stop();
+  }
 }
 
 const db = mongoose.connection;

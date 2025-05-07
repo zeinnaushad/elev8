@@ -11,8 +11,8 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>LUXEMODE - Premium Fashion Brand</title>
-        <meta name="description" content="Discover premium fashion at LUXEMODE. Shop our exclusive collection of women's and men's clothing, accessories, and more with worldwide shipping." />
+        <title>ELEV8 - Premium Fashion Brand</title>
+        <meta name="description" content="Discover premium fashion at ELEV8. Shop our exclusive collection of women's and men's clothing, accessories, and more with worldwide shipping." />
       </Helmet>
       
       <HeroSlider />

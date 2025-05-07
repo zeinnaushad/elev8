@@ -236,7 +236,7 @@ const ProductCard = ({ product, index, onAddToCart, onWishlist }: ProductCardPro
             : "Accessories"}
         </p>
         <div className="flex justify-between items-center">
-          <span className="font-semibold">${parseFloat(String(product.price)).toFixed(2)}</span>
+          <span className="font-semibold text-pink-600">₹{Math.round(parseFloat(String(product.price)) * 83)}</span>
           <Button
             variant="default"
             size="icon"
