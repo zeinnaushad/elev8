@@ -60,9 +60,40 @@ const Header = ({ toggleCart }: HeaderProps) => {
               <Search className="h-5 w-5" />
             </Button>
             
-            <Button variant="ghost" size="icon" aria-label="Account" className="text-white hover:text-pink-400">
-              <User className="h-5 w-5" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Account" className="text-white hover:text-pink-400 relative">
+                  <User className="h-5 w-5" />
+                  {user && (
+                    <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-500 rounded-full"></span>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-black/90 backdrop-blur-sm border-white/10 text-white">
+                {user ? (
+                  <>
+                    <div className="p-2 border-b border-white/10">
+                      <p className="font-medium">Welcome, {user.username}</p>
+                      <p className="text-sm text-gray-400 truncate">{user.email}</p>
+                    </div>
+                    <DropdownMenuItem 
+                      className="cursor-pointer hover:bg-white/10"
+                      onClick={() => logoutMutation.mutate()}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Logout</span>
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <Link href="/auth">
+                    <a className="flex items-center p-2 hover:bg-white/10 cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Sign In / Register</span>
+                    </a>
+                  </Link>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <Button 
               variant="ghost" 
@@ -135,6 +166,31 @@ const Header = ({ toggleCart }: HeaderProps) => {
                 >
                   CONTACT
                 </MobileNavLink>
+                
+                <div className="border-t border-white/10 mt-2 pt-2">
+                  {user ? (
+                    <button
+                      className="block w-full text-left font-space text-sm font-medium tracking-wide py-2 text-gray-400 hover:text-white"
+                      onClick={() => {
+                        logoutMutation.mutate();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <span className="flex items-center">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        LOGOUT
+                      </span>
+                    </button>
+                  ) : (
+                    <MobileNavLink 
+                      href="/auth" 
+                      active={location === "/auth"} 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      SIGN IN / REGISTER
+                    </MobileNavLink>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}

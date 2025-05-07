@@ -26,7 +26,7 @@ let productsData = [
     name: 'Wool Blend Coat',
     slug: 'wool-blend-coat',
     description: 'A luxurious wool-blend coat perfect for cold weather. Features a classic silhouette with a modern twist.',
-    price: 199.99,
+    price: 129.99,
     imageUrl: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1200',
     categoryId: '', // Will be populated with women category ID
     isNew: 1,
@@ -36,7 +36,7 @@ let productsData = [
     name: 'Cotton Shirt',
     slug: 'cotton-shirt',
     description: 'A comfortable 100% cotton shirt with a tailored fit. Perfect for casual or formal occasions.',
-    price: 59.99,
+    price: 39.99,
     imageUrl: 'https://images.unsplash.com/photo-1602810320073-1230c46d89d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1200',
     categoryId: '', // Will be populated with men category ID
     isNew: 1,
@@ -46,7 +46,7 @@ let productsData = [
     name: 'Leather Handbag',
     slug: 'leather-handbag',
     description: 'A stylish leather handbag with multiple compartments. Handcrafted with premium materials.',
-    price: 149.99,
+    price: 99.99,
     imageUrl: 'https://images.unsplash.com/photo-1584917865442-de89df41c136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1200',
     categoryId: '', // Will be populated with accessories category ID
     isNew: 1,
@@ -56,7 +56,7 @@ let productsData = [
     name: 'Summer Dress',
     slug: 'summer-dress',
     description: 'A lightweight summer dress made from breathable fabric. Features a flattering silhouette and vibrant pattern.',
-    price: 79.99,
+    price: 59.99,
     imageUrl: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1200',
     categoryId: '', // Will be populated with women category ID
     isNew: 0,
