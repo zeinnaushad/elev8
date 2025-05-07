@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/hooks/useCart";
 
@@ -22,14 +22,19 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
     return total + price * item.quantity;
   }, 0);
 
+  const [, setLocation] = useLocation();
+
   const handleCheckout = () => {
-    toast({
-      title: "Checkout initiated",
-      description: "This would normally take you to checkout."
-    });
-    // For demo purposes, we'll just clear the cart
-    clearCart();
+    if (cartItems.length === 0) {
+      toast({
+        title: "Cart is empty",
+        description: "Add some items to your cart before checking out."
+      });
+      return;
+    }
+    
     onClose();
+    setLocation("/checkout");
   };
 
   // Close cart with escape key

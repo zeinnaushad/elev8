@@ -14,6 +14,9 @@ import Home from "@/pages/Home";
 import ProductDetails from "@/pages/ProductDetails";
 import Category from "@/pages/Category";
 import AuthPage from "@/pages/auth-page";
+import CheckoutPage from "@/pages/checkout-page";
+import ContactPage from "@/pages/contact-page";
+import FeaturesPage from "@/pages/features-page";
 import NotFound from "@/pages/not-found";
 
 function App() {
@@ -47,6 +50,7 @@ function App() {
                 <Switch>
                   <Route path="/" component={Home} />
                   <Route path="/auth" component={AuthPage} />
+                  <Route path="/checkout" component={CheckoutPage} />
                   <Route path="/product/:slug">
                     {params => <ProductDetails slug={params.slug} />}
                   </Route>
