@@ -15,23 +15,23 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1534481909716-9a482087f27d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
-    title: "LIFE IS TOO SHORT",
+    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    title: "LIFE IS TOO SHORT TO DRESS BORING",
     subtitle: "Explore our curated collection of stylish clothing and accessories to elevate your look",
     buttonText: "Shop Now",
     buttonLink: "/category/women",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
-    title: "TO DRESS BORING",
+    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    title: "COSMIC FASHION COLLECTION",
     subtitle: "Express yourself with our premium fashion pieces designed for the bold",
     buttonText: "Explore",
     buttonLink: "/category/men",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
     title: "ELEVATE YOUR STYLE",
     subtitle: "Stand out from the crowd with fashion that makes a statement",
     buttonText: "Discover",
@@ -94,13 +94,13 @@ const HeroSlider = () => {
           transition={{ type: "tween", duration: 0.5 }}
           className="absolute inset-0 z-10"
         >
-          <div className="relative h-full flex items-center justify-between px-6 md:px-12 lg:px-24">
-            <div className="max-w-md">
+          <div className="relative h-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 px-6 md:px-12 lg:px-24">
+            <div className="z-10">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="font-serif font-light text-white text-4xl md:text-5xl lg:text-6xl leading-tight mb-4"
+                className="font-space font-medium text-white text-3xl md:text-4xl lg:text-5xl leading-tight mb-4"
               >
                 {slides[currentSlide].title}
               </motion.h1>
@@ -125,21 +125,21 @@ const HeroSlider = () => {
                 </Button>
               </motion.div>
             </div>
-            <div className="hidden md:block max-w-md h-full">
-              <div className="h-full flex items-center">
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  className="relative overflow-hidden rounded-lg shadow-2xl"
-                  style={{ width: '350px', height: '400px' }}
-                >
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url('${slides[currentSlide].image}')` }}
-                  />
-                </motion.div>
-              </div>
+            <div className="hidden md:flex justify-end items-center">
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="relative overflow-hidden rounded-lg shadow-2xl"
+                style={{ width: '400px', height: '500px' }}
+              >
+                <img 
+                  src={slides[currentSlide].image}
+                  alt={slides[currentSlide].title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
+              </motion.div>
             </div>
           </div>
         </motion.div>
