@@ -155,7 +155,7 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                             </Button>
                           </div>
                           <span className="font-semibold">
-                            ${parseFloat(String(item.product?.price)).toFixed(2)}
+                            ₹{(parseFloat(String(item.product?.price)) * 75).toFixed(2)}
                           </span>
                         </div>
                       </div>
@@ -177,7 +177,7 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                 <div className="p-4 border-t">
                   <div className="flex justify-between mb-2">
                     <span>Subtotal</span>
-                    <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                    <span className="font-semibold">₹{(subtotal * 75).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between mb-4">
                     <span>Shipping</span>
@@ -186,7 +186,7 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                   <Separator className="my-4" />
                   <div className="flex justify-between text-lg mb-6">
                     <span className="font-medium">Total</span>
-                    <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                    <span className="font-semibold">₹{(subtotal * 75).toFixed(2)}</span>
                   </div>
                   <Button 
                     className="w-full bg-primary hover:bg-accent text-white font-montserrat font-medium mb-3"

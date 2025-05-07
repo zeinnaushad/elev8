@@ -51,6 +51,8 @@ function App() {
                   <Route path="/" component={Home} />
                   <Route path="/auth" component={AuthPage} />
                   <Route path="/checkout" component={CheckoutPage} />
+                  <Route path="/contact" component={ContactPage} />
+                  <Route path="/features" component={FeaturesPage} />
                   <Route path="/product/:slug">
                     {params => <ProductDetails slug={params.slug} />}
                   </Route>
