@@ -18,6 +18,12 @@ import CheckoutPage from "@/pages/checkout-page";
 import ContactPage from "@/pages/contact-page";
 import FeaturesPage from "@/pages/features-page";
 import ShopPage from "@/pages/shop-page";
+import AboutPage from "@/pages/about-page";
+import ShippingReturnsPage from "@/pages/shipping-returns-page";
+import PrivacyPolicyPage from "@/pages/privacy-policy-page";
+import TermsConditionsPage from "@/pages/terms-conditions-page";
+import SalePage from "@/pages/sale-page";
+import NewArrivalsPage from "@/pages/new-arrivals-page";
 import NotFound from "@/pages/not-found";
 
 function App() {
@@ -55,6 +61,12 @@ function App() {
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/features" component={FeaturesPage} />
                   <Route path="/shop" component={ShopPage} />
+                  <Route path="/about" component={AboutPage} />
+                  <Route path="/shipping-returns" component={ShippingReturnsPage} />
+                  <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+                  <Route path="/terms-conditions" component={TermsConditionsPage} />
+                  <Route path="/sale" component={SalePage} />
+                  <Route path="/new-arrivals" component={NewArrivalsPage} />
                   <Route path="/product/:slug">
                     {params => <ProductDetails slug={params.slug} />}
                   </Route>
