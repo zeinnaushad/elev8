@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/hooks/use-auth";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Search, User, Menu, X } from "lucide-react";
+import { ShoppingBag, Search, User, Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
   toggleCart: () => void;
@@ -15,6 +22,7 @@ const Header = ({ toggleCart }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [location] = useLocation();
   const { cartItems } = useCart();
+  const { user, logoutMutation } = useAuth();
 
   // Track scroll position to add shadow when scrolled
   useEffect(() => {

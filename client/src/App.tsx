@@ -8,9 +8,12 @@ import Footer from "@/components/layout/Footer";
 import CartSidebar from "@/components/cart/CartSidebar";
 import { queryClient } from "./lib/queryClient";
 import { CartProvider } from "./contexts/CartContext";
+import { AuthProvider } from "./hooks/use-auth";
+import { ProtectedRoute } from "./lib/protected-route";
 import Home from "@/pages/Home";
 import ProductDetails from "@/pages/ProductDetails";
 import Category from "@/pages/Category";
+import AuthPage from "@/pages/auth-page";
 import NotFound from "@/pages/not-found";
 
 function App() {
@@ -35,28 +38,31 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <TooltipProvider>
-          <div className="flex flex-col min-h-screen">
-            <Header toggleCart={toggleCart} />
-            <main className="flex-grow">
-              <Switch>
-                <Route path="/" component={Home} />
-                <Route path="/product/:slug">
-                  {params => <ProductDetails slug={params.slug} />}
-                </Route>
-                <Route path="/category/:slug">
-                  {params => <Category slug={params.slug} />}
-                </Route>
-                <Route component={NotFound} />
-              </Switch>
-            </main>
-            <Footer />
-            <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-            <Toaster />
-          </div>
-        </TooltipProvider>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header toggleCart={toggleCart} />
+              <main className="flex-grow">
+                <Switch>
+                  <Route path="/" component={Home} />
+                  <Route path="/auth" component={AuthPage} />
+                  <Route path="/product/:slug">
+                    {params => <ProductDetails slug={params.slug} />}
+                  </Route>
+                  <Route path="/category/:slug">
+                    {params => <Category slug={params.slug} />}
+                  </Route>
+                  <Route component={NotFound} />
+                </Switch>
+              </main>
+              <Footer />
+              <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+              <Toaster />
+            </div>
+          </TooltipProvider>
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
