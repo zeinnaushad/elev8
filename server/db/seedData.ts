@@ -66,7 +66,7 @@ let productsData = [
     name: 'Slim Fit Jeans',
     slug: 'slim-fit-jeans',
     description: 'Modern slim fit jeans made from premium denim. Features a comfortable stretch and durable construction.',
-    price: 89.99,
+    price: 69.99,
     imageUrl: 'https://images.unsplash.com/photo-1603217192634-61068e4d4bf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1200',
     categoryId: '', // Will be populated with men category ID
     isNew: 0,
@@ -76,7 +76,7 @@ let productsData = [
     name: 'Silver Watch',
     slug: 'silver-watch',
     description: 'An elegant silver watch with a minimalist design. Features a premium quartz movement and sapphire crystal.',
-    price: 199.99,
+    price: 129.99,
     imageUrl: 'https://images.unsplash.com/photo-1587925358603-c2eea5305bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1200',
     categoryId: '', // Will be populated with accessories category ID
     isNew: 0,
