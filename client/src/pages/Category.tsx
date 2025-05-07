@@ -177,7 +177,7 @@ const Category = ({ slug }: CategoryProps) => {
                       <>
                         <CheckboxItem id="type-dresses" label="Dresses" />
                         <CheckboxItem id="type-tops" label="Tops" />
-                        <CheckboxItem id="type-skirts" label="Skirts" />
+                        <CheckboxItem id="type-bottoms" label="Bottoms" />
                         <CheckboxItem id="type-jackets" label="Jackets & Coats" />
                       </>
                     )}
@@ -258,7 +258,7 @@ const Category = ({ slug }: CategoryProps) => {
                           <>
                             <CheckboxItem id="m-type-dresses" label="Dresses" />
                             <CheckboxItem id="m-type-tops" label="Tops" />
-                            <CheckboxItem id="m-type-skirts" label="Skirts" />
+                            <CheckboxItem id="m-type-bottoms" label="Bottoms" />
                             <CheckboxItem id="m-type-jackets" label="Jackets & Coats" />
                           </>
                         )}
