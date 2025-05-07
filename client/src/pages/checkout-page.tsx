@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Check, CreditCard, Truck } from "lucide-react";
+import PayPalButton from "@/components/PayPalButton";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +23,7 @@ const checkoutFormSchema = z.object({
   state: z.string().min(2, 'State must be at least 2 characters'),
   postalCode: z.string().min(5, 'Postal code must be at least 5 characters'),
   country: z.string().min(2, 'Country must be at least 2 characters'),
-  paymentMethod: z.enum(['card', 'cod']),
+  paymentMethod: z.enum(['card', 'paypal', 'cod']),
   // Card details only required if payment method is card
   cardNumber: z.string().optional()
     .refine(val => val === undefined || val.length >= 16, {
@@ -353,6 +354,23 @@ export default function CheckoutPage() {
                   </div>
                   
                   <div className="flex items-center space-x-2 bg-black/50 border border-gray-700 rounded-lg p-3">
+                    <RadioGroupItem value="paypal" id="payment-paypal" />
+                    <Label htmlFor="payment-paypal" className="flex items-center text-white cursor-pointer">
+                      <svg 
+                        className="h-5 w-5 mr-2" 
+                        viewBox="0 0 24 24" 
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="#0070ba"
+                      >
+                        <path 
+                          d="M20.924 7.625a6.27 6.27 0 0 0-1.282-.806c-.65-.323-1.385-.55-2.147-.678a16.91 16.91 0 0 0-2.57-.188h-5.39c-.37 0-.733.048-1.07.188-.338.14-.602.37-.806.705-.204.335-.307.743-.307 1.223l-.835 5.228-.24 1.485v.5c0 .352.072.636.217.854.145.217.34.376.59.48.25.1.53.156.84.168h2.706c.247 0 .514-.05.802-.146.29-.098.554-.285.794-.565.24-.28.412-.68.518-1.195l.24-1.2.682-4.274a.35.35 0 0 1 .12-.217.35.35 0 0 1 .24-.083h.87c1.276 0 2.4.08 3.366.243.968.162 1.74.38 2.317.658.578.277 1.01.59 1.302.94.29.35.51.695.662 1.033.153.337.265.657.337.958.072.3.12.553.145.758.024.204.036.352.036.444v.41c0 .565-.132 1.17-.397 1.814-.265.647-.662 1.24-1.19 1.78-.53.542-1.185.995-1.967 1.358-.783.362-1.69.634-2.726.815-1.037.18-2.195.27-3.473.27h-.99c-.74 0-1.358.303-1.85.91-.495.61-.742 1.36-.742 2.255 0 .217.012.41.036.577.024.17.06.367.108.59l.517 2.388.12.577c.096.254.24.47.433.65.192.183.409.313.65.397.24.085.47.127.686.127h2.353c.302 0 .559-.048.769-.146.21-.097.39-.2.541-.31.15-.11.28-.228.385-.353.105-.125.193-.23.265-.315l.12-.158.193-.444.517-3.26c.048-.195.168-.35.36-.47.193-.122.408-.182.65-.182h4.112c1.312 0 2.445-.115 3.4-.35.954-.232 1.747-.55 2.376-.958.632-.41 1.13-.89 1.496-1.44.366-.553.626-1.143.78-1.77.156-.627.24-1.276.24-1.95v-.41c0-.566-.078-1.175-.234-1.83-.154-.65-.437-1.302-.85-1.956-.41-.65-1.004-1.233-1.781-1.745z" 
+                        />
+                      </svg>
+                      PayPal
+                    </Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2 bg-black/50 border border-gray-700 rounded-lg p-3">
                     <RadioGroupItem value="cod" id="payment-cod" />
                     <Label htmlFor="payment-cod" className="text-white cursor-pointer">
                       Cash on Delivery
@@ -423,13 +441,35 @@ export default function CheckoutPage() {
                   </div>
                 )}
                 
-                <Button
-                  type="submit"
-                  className="w-full bg-white text-black hover:bg-gray-200 font-medium mt-6"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Processing...' : `Place Order - ${formatPrice(toRupees(total))}`}
-                </Button>
+                {/* PayPal button section (only shown if PayPal is selected) */}
+                {paymentMethod === 'paypal' && (
+                  <div className="mt-4 p-4 border border-gray-700 rounded-lg bg-black/30">
+                    <h3 className="text-white font-medium mb-4">Pay with PayPal</h3>
+                    <p className="text-gray-300 mb-4">
+                      You will be redirected to PayPal to complete your payment securely.
+                    </p>
+                    <PayPalButton 
+                      amount={total.toString()} 
+                      currency="USD" 
+                      intent="CAPTURE"
+                      onSuccess={() => {
+                        clearCart();
+                        setOrderComplete(true);
+                      }}
+                    />
+                  </div>
+                )}
+                
+                {/* Regular checkout button (shown for card and COD options) */}
+                {paymentMethod !== 'paypal' && (
+                  <Button
+                    type="submit"
+                    className="w-full bg-white text-black hover:bg-gray-200 font-medium mt-6"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Processing...' : `Place Order - ${formatPrice(toRupees(total))}`}
+                  </Button>
+                )}
               </form>
             </div>
           </div>
