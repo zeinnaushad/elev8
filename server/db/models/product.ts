@@ -39,7 +39,7 @@ const productSchema = new mongoose.Schema({
 });
 
 // Add virtual id field to match the interface
-productSchema.virtual('id').get(function() {
+productSchema.virtual('id').get(function(this: any) {
   return this._id;
 });
 

@@ -21,7 +21,7 @@ const cartItemSchema = new mongoose.Schema({
 });
 
 // Add virtual id field to match the interface
-cartItemSchema.virtual('id').get(function() {
+cartItemSchema.virtual('id').get(function(this: any) {
   return this._id;
 });
 

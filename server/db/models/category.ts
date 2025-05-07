@@ -20,7 +20,7 @@ const categorySchema = new mongoose.Schema({
 });
 
 // Add virtual id field to match the interface
-categorySchema.virtual('id').get(function() {
+categorySchema.virtual('id').get(function(this: any) {
   return this._id;
 });
 
