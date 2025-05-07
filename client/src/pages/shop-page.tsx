@@ -141,7 +141,13 @@ export default function ShopPage() {
 
   const handleAddToCart = async (product: Product) => {
     try {
-      await addToCart(product);
+      // Ensure product ID is properly converted to a number
+      const productWithNumberId = {
+        ...product,
+        id: typeof product.id === 'string' ? parseInt(product.id) : product.id
+      };
+      
+      await addToCart(productWithNumberId);
       toast({
         title: "Added to cart",
         description: `${product.name} has been added to your cart`,

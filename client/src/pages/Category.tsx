@@ -47,7 +47,13 @@ const Category = ({ slug }: CategoryProps) => {
   const isLoading = categoryLoading || productsLoading;
 
   const handleAddToCart = (product: Product) => {
-    addToCart(product);
+    // Ensure product ID is properly converted to a number
+    const productWithNumberId = {
+      ...product,
+      id: typeof product.id === 'string' ? parseInt(product.id) : product.id
+    };
+    
+    addToCart(productWithNumberId);
     toast({
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
