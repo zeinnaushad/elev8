@@ -5,12 +5,14 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Product } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import Newsletter from '@/components/home/Newsletter';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, ShoppingBag, Filter, ChevronDown } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 export default function ShopPage() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -18,6 +20,8 @@ export default function ShopPage() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState('newest');
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [openFilter, setOpenFilter] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
 
@@ -61,13 +65,65 @@ export default function ShopPage() {
     fetchProducts();
   }, [toast]);
 
-  // Filter products by category
-  const filteredProducts = activeCategory
-    ? products.filter(product => {
-        const category = categories.find(cat => cat.id === product.categoryId);
-        return category && category.slug === activeCategory;
-      })
-    : products;
+  // Helper function to check if a product belongs to a specific type
+  const isProductOfType = (product: Product, type: string): boolean => {
+    // This is a simplified implementation - in a real app, you would have product types in the database
+    const productName = product.name.toLowerCase();
+    const productDesc = product.description.toLowerCase();
+    
+    switch (type) {
+      case 'dresses':
+        return productName.includes('dress') || productDesc.includes('dress');
+      case 'tops':
+        return productName.includes('top') || productName.includes('shirt') || productDesc.includes('top');
+      case 'bottoms':
+        return (
+          productName.includes('bottom') || 
+          productName.includes('pant') || 
+          productName.includes('jeans') || 
+          productDesc.includes('bottom')
+        );
+      case 'jackets':
+        return (
+          productName.includes('jacket') || 
+          productName.includes('coat') || 
+          productDesc.includes('jacket') || 
+          productDesc.includes('coat')
+        );
+      case 'shirts':
+        return productName.includes('shirt') || productDesc.includes('shirt');
+      case 'tshirts':
+        return productName.includes('t-shirt') || productName.includes('tshirt') || productDesc.includes('t-shirt');
+      case 'pants':
+        return productName.includes('pant') || productName.includes('jeans') || productDesc.includes('pant');
+      case 'suits':
+        return productName.includes('suit') || productDesc.includes('suit');
+      case 'bags':
+        return productName.includes('bag') || productName.includes('handbag') || productDesc.includes('bag');
+      case 'jewelry':
+        return productName.includes('jewelry') || productName.includes('jewellery') || productDesc.includes('jewelry');
+      case 'watches':
+        return productName.includes('watch') || productDesc.includes('watch');
+      case 'sunglasses':
+        return productName.includes('sunglass') || productName.includes('glasses') || productDesc.includes('sunglass');
+      default:
+        return false;
+    }
+  };
+
+  // Filter products by category and product type
+  const filteredProducts = products.filter(product => {
+    // Get the category of the product
+    const category = categories.find(cat => cat.id === product.categoryId);
+    
+    // If no category is selected or the product matches the selected category
+    const matchesCategory = !activeCategory || (category && category.slug === activeCategory);
+    
+    // If no product types are selected or the product matches at least one selected type
+    const matchesType = selectedTypes.length === 0 || selectedTypes.some(type => isProductOfType(product, type));
+    
+    return matchesCategory && matchesType;
+  });
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -107,6 +163,22 @@ export default function ShopPage() {
     });
   };
 
+  // Toggle product type selection
+  const toggleProductType = (type: string) => {
+    setSelectedTypes(prev => 
+      prev.includes(type) 
+        ? prev.filter(t => t !== type) 
+        : [...prev, type]
+    );
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setActiveCategory(null);
+    setSelectedTypes([]);
+    setSortOption('newest');
+  };
+
   // Format price in rupees
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -134,94 +206,440 @@ export default function ShopPage() {
             <BreadcrumbItem>
               <span>Shop</span>
             </BreadcrumbItem>
+            {activeCategory && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <span className="capitalize">{activeCategory}</span>
+                </BreadcrumbItem>
+              </>
+            )}
           </BreadcrumbList>
         </Breadcrumb>
         
         {/* Shop Header */}
         <div className="mb-8">
-          <h1 className="font-montserrat font-semibold text-3xl md:text-4xl">Shop Collection</h1>
+          <h1 className="font-montserrat font-semibold text-3xl md:text-4xl">
+            {activeCategory ? `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Collection` : 'Shop Collection'}
+          </h1>
           <p className="text-neutral-600 mt-2">
             {filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"}
           </p>
         </div>
         
-        {/* Category Filters */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          <Button
-            variant={activeCategory === null ? "default" : "outline"}
-            className="bg-white text-black border-gray-300 hover:bg-gray-100"
-            onClick={() => setActiveCategory(null)}
-          >
-            All Products
-          </Button>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Sidebar Filters - Desktop */}
+          <div className="hidden md:block">
+            <div className="sticky top-24">
+              <h2 className="font-montserrat font-medium text-xl mb-4">Categories</h2>
+              
+              <div className="space-y-6">
+                {/* Category Buttons */}
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant={activeCategory === null ? "default" : "outline"}
+                    className={activeCategory === null 
+                      ? "bg-black text-white justify-start" 
+                      : "bg-white text-black border-gray-300 justify-start hover:bg-gray-100"}
+                    onClick={() => setActiveCategory(null)}
+                  >
+                    All Products
+                  </Button>
+                  
+                  {categories.map(category => (
+                    <Button
+                      key={category.id}
+                      variant={activeCategory === category.slug ? "default" : "outline"}
+                      className={activeCategory === category.slug 
+                        ? "bg-black text-white justify-start" 
+                        : "bg-white text-black border-gray-300 justify-start hover:bg-gray-100"}
+                      onClick={() => setActiveCategory(category.slug)}
+                    >
+                      {category.name}
+                    </Button>
+                  ))}
+                </div>
+                
+                <Separator />
+                
+                {/* Product Type Filters */}
+                <FilterSection title="Product Type">
+                  <div className="space-y-2">
+                    {/* Women's Products */}
+                    {(!activeCategory || activeCategory === "women") && (
+                      <>
+                        <h3 className="text-sm font-medium mb-2 text-gray-400">Women</h3>
+                        <CheckboxItem 
+                          id="type-dresses" 
+                          label="Dresses" 
+                          checked={selectedTypes.includes('dresses')} 
+                          onCheckedChange={() => toggleProductType('dresses')} 
+                        />
+                        <CheckboxItem 
+                          id="type-tops" 
+                          label="Tops" 
+                          checked={selectedTypes.includes('tops')} 
+                          onCheckedChange={() => toggleProductType('tops')} 
+                        />
+                        <CheckboxItem 
+                          id="type-bottoms" 
+                          label="Bottoms" 
+                          checked={selectedTypes.includes('bottoms')} 
+                          onCheckedChange={() => toggleProductType('bottoms')} 
+                        />
+                        <CheckboxItem 
+                          id="type-jackets" 
+                          label="Jackets & Coats" 
+                          checked={selectedTypes.includes('jackets')} 
+                          onCheckedChange={() => toggleProductType('jackets')} 
+                        />
+                      </>
+                    )}
+                    
+                    {/* Men's Products */}
+                    {(!activeCategory || activeCategory === "men") && (
+                      <>
+                        <h3 className="text-sm font-medium mb-2 mt-4 text-gray-400">Men</h3>
+                        <CheckboxItem 
+                          id="type-shirts" 
+                          label="Shirts" 
+                          checked={selectedTypes.includes('shirts')} 
+                          onCheckedChange={() => toggleProductType('shirts')} 
+                        />
+                        <CheckboxItem 
+                          id="type-tshirts" 
+                          label="T-Shirts" 
+                          checked={selectedTypes.includes('tshirts')} 
+                          onCheckedChange={() => toggleProductType('tshirts')} 
+                        />
+                        <CheckboxItem 
+                          id="type-pants" 
+                          label="Pants" 
+                          checked={selectedTypes.includes('pants')} 
+                          onCheckedChange={() => toggleProductType('pants')} 
+                        />
+                        <CheckboxItem 
+                          id="type-suits" 
+                          label="Suits" 
+                          checked={selectedTypes.includes('suits')} 
+                          onCheckedChange={() => toggleProductType('suits')} 
+                        />
+                      </>
+                    )}
+                    
+                    {/* Accessories */}
+                    {(!activeCategory || activeCategory === "accessories") && (
+                      <>
+                        <h3 className="text-sm font-medium mb-2 mt-4 text-gray-400">Accessories</h3>
+                        <CheckboxItem 
+                          id="type-bags" 
+                          label="Bags" 
+                          checked={selectedTypes.includes('bags')} 
+                          onCheckedChange={() => toggleProductType('bags')} 
+                        />
+                        <CheckboxItem 
+                          id="type-jewelry" 
+                          label="Jewelry" 
+                          checked={selectedTypes.includes('jewelry')} 
+                          onCheckedChange={() => toggleProductType('jewelry')} 
+                        />
+                        <CheckboxItem 
+                          id="type-watches" 
+                          label="Watches" 
+                          checked={selectedTypes.includes('watches')} 
+                          onCheckedChange={() => toggleProductType('watches')} 
+                        />
+                        <CheckboxItem 
+                          id="type-sunglasses" 
+                          label="Sunglasses" 
+                          checked={selectedTypes.includes('sunglasses')} 
+                          onCheckedChange={() => toggleProductType('sunglasses')} 
+                        />
+                      </>
+                    )}
+                  </div>
+                </FilterSection>
+                
+                <Separator />
+                
+                <FilterSection title="Price Range">
+                  <div className="space-y-2">
+                    <CheckboxItem id="price-0-50" label="₹0 - ₹4,150" />
+                    <CheckboxItem id="price-50-100" label="₹4,150 - ₹8,300" />
+                    <CheckboxItem id="price-100-200" label="₹8,300 - ₹16,600" />
+                    <CheckboxItem id="price-200" label="₹16,600+" />
+                  </div>
+                </FilterSection>
+                
+                <Separator />
+                
+                <FilterSection title="Size">
+                  <div className="space-y-2">
+                    <CheckboxItem id="size-xs" label="XS" />
+                    <CheckboxItem id="size-s" label="S" />
+                    <CheckboxItem id="size-m" label="M" />
+                    <CheckboxItem id="size-l" label="L" />
+                    <CheckboxItem id="size-xl" label="XL" />
+                  </div>
+                </FilterSection>
+                
+                <Separator />
+                
+                <Button 
+                  className="w-full" 
+                  variant="outline"
+                  onClick={clearFilters}
+                >
+                  Clear All Filters
+                </Button>
+              </div>
+            </div>
+          </div>
           
-          {categories.map(category => (
-            <Button
-              key={category.id}
-              variant={activeCategory === category.slug ? "default" : "outline"}
-              className={activeCategory === category.slug 
-                ? "bg-black text-white hover:bg-gray-800" 
-                : "bg-white text-black border-gray-300 hover:bg-gray-100"}
-              onClick={() => setActiveCategory(category.slug)}
-            >
-              {category.name}
-            </Button>
-          ))}
-        </div>
-        
-        {/* Sort and Results Count */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-          <p className="text-neutral-600">
-            Showing {sortedProducts.length} {sortedProducts.length === 1 ? "result" : "results"}
-          </p>
-          
-          <div className="w-full sm:w-auto">
-            <select 
-              className="border border-input bg-transparent rounded-md p-2 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-            >
-              <option value="newest">Sort by: Newest</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-            </select>
+          {/* Products Grid */}
+          <div className="md:col-span-3">
+            {/* Mobile Filter Button */}
+            <div className="md:hidden mb-4">
+              <Button 
+                variant="outline" 
+                className="w-full flex items-center justify-between"
+                onClick={() => setOpenFilter(!openFilter)}
+              >
+                <span className="flex items-center">
+                  <Filter className="mr-2 h-4 w-4" /> Filters
+                </span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${openFilter ? 'rotate-180' : ''}`} />
+              </Button>
+              
+              <Collapsible open={openFilter} onOpenChange={setOpenFilter} className="mt-2">
+                <CollapsibleContent className="p-4 border rounded-md">
+                  <div className="space-y-6">
+                    {/* Mobile Category Buttons */}
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        size="sm"
+                        variant={activeCategory === null ? "default" : "outline"}
+                        className={activeCategory === null 
+                          ? "bg-black text-white" 
+                          : "bg-white text-black border-gray-300 hover:bg-gray-100"}
+                        onClick={() => setActiveCategory(null)}
+                      >
+                        All
+                      </Button>
+                      
+                      {categories.map(category => (
+                        <Button
+                          key={category.id}
+                          size="sm"
+                          variant={activeCategory === category.slug ? "default" : "outline"}
+                          className={activeCategory === category.slug 
+                            ? "bg-black text-white" 
+                            : "bg-white text-black border-gray-300 hover:bg-gray-100"}
+                          onClick={() => setActiveCategory(category.slug)}
+                        >
+                          {category.name}
+                        </Button>
+                      ))}
+                    </div>
+                    
+                    <Separator />
+                    
+                    {/* Mobile Product Type Filters */}
+                    <FilterSection title="Product Type">
+                      <div className="space-y-4">
+                        {/* Women's Mobile Filters */}
+                        {(!activeCategory || activeCategory === "women") && (
+                          <div>
+                            <h3 className="text-sm font-medium mb-2 text-gray-400">Women</h3>
+                            <div className="grid grid-cols-2 gap-2">
+                              <CheckboxItem 
+                                id="m-type-dresses" 
+                                label="Dresses" 
+                                checked={selectedTypes.includes('dresses')} 
+                                onCheckedChange={() => toggleProductType('dresses')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-tops" 
+                                label="Tops" 
+                                checked={selectedTypes.includes('tops')} 
+                                onCheckedChange={() => toggleProductType('tops')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-bottoms" 
+                                label="Bottoms" 
+                                checked={selectedTypes.includes('bottoms')} 
+                                onCheckedChange={() => toggleProductType('bottoms')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-jackets" 
+                                label="Jackets & Coats" 
+                                checked={selectedTypes.includes('jackets')} 
+                                onCheckedChange={() => toggleProductType('jackets')} 
+                              />
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Men's Mobile Filters */}
+                        {(!activeCategory || activeCategory === "men") && (
+                          <div>
+                            <h3 className="text-sm font-medium mb-2 text-gray-400">Men</h3>
+                            <div className="grid grid-cols-2 gap-2">
+                              <CheckboxItem 
+                                id="m-type-shirts" 
+                                label="Shirts" 
+                                checked={selectedTypes.includes('shirts')} 
+                                onCheckedChange={() => toggleProductType('shirts')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-tshirts" 
+                                label="T-Shirts" 
+                                checked={selectedTypes.includes('tshirts')} 
+                                onCheckedChange={() => toggleProductType('tshirts')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-pants" 
+                                label="Pants" 
+                                checked={selectedTypes.includes('pants')} 
+                                onCheckedChange={() => toggleProductType('pants')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-suits" 
+                                label="Suits" 
+                                checked={selectedTypes.includes('suits')} 
+                                onCheckedChange={() => toggleProductType('suits')} 
+                              />
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Accessories Mobile Filters */}
+                        {(!activeCategory || activeCategory === "accessories") && (
+                          <div>
+                            <h3 className="text-sm font-medium mb-2 text-gray-400">Accessories</h3>
+                            <div className="grid grid-cols-2 gap-2">
+                              <CheckboxItem 
+                                id="m-type-bags" 
+                                label="Bags" 
+                                checked={selectedTypes.includes('bags')} 
+                                onCheckedChange={() => toggleProductType('bags')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-jewelry" 
+                                label="Jewelry" 
+                                checked={selectedTypes.includes('jewelry')} 
+                                onCheckedChange={() => toggleProductType('jewelry')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-watches" 
+                                label="Watches" 
+                                checked={selectedTypes.includes('watches')} 
+                                onCheckedChange={() => toggleProductType('watches')} 
+                              />
+                              <CheckboxItem 
+                                id="m-type-sunglasses" 
+                                label="Sunglasses" 
+                                checked={selectedTypes.includes('sunglasses')} 
+                                onCheckedChange={() => toggleProductType('sunglasses')} 
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </FilterSection>
+                    
+                    <Separator />
+                    
+                    <FilterSection title="Price Range">
+                      <div className="space-y-2">
+                        <CheckboxItem id="m-price-0-50" label="₹0 - ₹4,150" />
+                        <CheckboxItem id="m-price-50-100" label="₹4,150 - ₹8,300" />
+                        <CheckboxItem id="m-price-100-200" label="₹8,300 - ₹16,600" />
+                        <CheckboxItem id="m-price-200" label="₹16,600+" />
+                      </div>
+                    </FilterSection>
+                    
+                    <Separator />
+                    
+                    <FilterSection title="Size">
+                      <div className="space-y-2">
+                        <CheckboxItem id="m-size-xs" label="XS" />
+                        <CheckboxItem id="m-size-s" label="S" />
+                        <CheckboxItem id="m-size-m" label="M" />
+                        <CheckboxItem id="m-size-l" label="L" />
+                        <CheckboxItem id="m-size-xl" label="XL" />
+                      </div>
+                    </FilterSection>
+                    
+                    <Separator />
+                    
+                    <Button 
+                      className="w-full" 
+                      variant="outline"
+                      onClick={clearFilters}
+                    >
+                      Clear All Filters
+                    </Button>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+            
+            {/* Sort and Results Count */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+              <p className="text-neutral-600">
+                Showing {sortedProducts.length} {sortedProducts.length === 1 ? "result" : "results"}
+              </p>
+              
+              <div className="w-full sm:w-auto">
+                <select 
+                  className="border border-input bg-transparent rounded-md p-2 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  <option value="newest">Sort by: Newest</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                </select>
+              </div>
+            </div>
+            
+            {/* Products Grid */}
+            {loading ? (
+              <div className="text-center py-20">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+                <p className="mt-4 text-neutral-600">Loading products...</p>
+              </div>
+            ) : sortedProducts.length === 0 ? (
+              <div className="text-center py-16">
+                <h3 className="text-xl font-medium mb-2">No products found</h3>
+                <p className="text-neutral-600 mb-4">
+                  We couldn't find any products that match your criteria.
+                </p>
+                <Button 
+                  variant="default" 
+                  onClick={clearFilters}
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sortedProducts.map((product, index) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    index={index}
+                    onAddToCart={() => handleAddToCart(product)}
+                    onWishlist={handleWishlist}
+                    toRupees={toRupees}
+                    formatPrice={formatPrice}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
-        
-        {/* Loading State */}
-        {loading ? (
-          <div className="text-center py-20">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
-            <p className="mt-4 text-neutral-600">Loading products...</p>
-          </div>
-        ) : sortedProducts.length === 0 ? (
-          <div className="text-center py-16">
-            <h3 className="text-xl font-medium mb-2">No products found</h3>
-            <p className="text-neutral-600 mb-4">
-              We couldn't find any products that match your criteria.
-            </p>
-            <Button 
-              variant="default" 
-              onClick={() => setActiveCategory(null)}
-            >
-              View All Products
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {sortedProducts.map((product, index) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                index={index}
-                onAddToCart={() => handleAddToCart(product)}
-                onWishlist={handleWishlist}
-                toRupees={toRupees}
-                formatPrice={formatPrice}
-              />
-            ))}
-          </div>
-        )}
       </div>
       
       {/* Newsletter */}
@@ -229,6 +647,38 @@ export default function ShopPage() {
     </>
   );
 }
+
+interface FilterSectionProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const FilterSection = ({ title, children }: FilterSectionProps) => (
+  <div>
+    <h3 className="font-montserrat font-medium mb-3">{title}</h3>
+    {children}
+  </div>
+);
+
+interface CheckboxItemProps {
+  id: string;
+  label: string;
+  checked?: boolean;
+  onCheckedChange?: () => void;
+}
+
+const CheckboxItem = ({ id, label, checked, onCheckedChange }: CheckboxItemProps) => (
+  <div className="flex items-center space-x-2">
+    <Checkbox 
+      id={id} 
+      checked={checked} 
+      onCheckedChange={onCheckedChange} 
+    />
+    <label htmlFor={id} className="text-sm cursor-pointer">
+      {label}
+    </label>
+  </div>
+);
 
 interface ProductCardProps {
   product: Product;
